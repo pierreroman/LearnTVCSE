@@ -60,7 +60,7 @@ Write-Output "------------------------------------------------------------------
 $OBSuri  = (curl https://aka.ms/downloadazcopy-v10-windows -MaximumRedirection 0 -ErrorAction silentlycontinue).headers.location
 $outputFileName = Split-Path $OBSuri -leaf
 $outputFile = $InstallFile + $outputFileName
-Invoke-WebRequest $OBSuri -OutFile $outputFile -Verbose
+Invoke-WebRequest $OBSuri -OutFile $outputFile -UseBasicParsing -Verbose
 Expand-Archive -LiteralPath $outputFile -DestinationPath $InstallFile -force -Verbose
 $result=Get-ChildItem -Path $InstallFile -Include azcopy.exe -File -Recurse -ErrorAction SilentlyContinue -Verbose
 Copy-Item $result.FullName -Destination "c:\windows\system32" -Force -Verbose
@@ -68,18 +68,18 @@ Copy-Item $result.FullName -Destination "c:\windows\system32" -Force -Verbose
 $OBSuri  = 'https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe'
 $outputFileName = Split-Path $OBSuri -leaf
 $outputFile = $InstallFile + $outputFileName
-Invoke-WebRequest -Uri $OBSuri -OutFile $outputFile -Verbose
+Invoke-WebRequest -Uri $OBSuri -OutFile $outputFile -UseBasicParsing -Verbose
 
 $OBSuri  = 'https://cdn-fastly.obsproject.com/downloads/vc_redist.x64.exe'
 $outputFileName = Split-Path $OBSuri -leaf
 $outputFile = $InstallFile + $outputFileName
-Invoke-WebRequest -Uri $OBSuri -OutFile $outputFile -Verbose
+Invoke-WebRequest -Uri $OBSuri -OutFile $outputFile -UseBasicParsing -Verbose
 
 
 $OBSuri  = 'https://github.com/obsproject/obs-studio/releases/download/25.0.8/OBS-Studio-25.0.8-Full-x64.zip'
 $outputFileName = Split-Path $OBSuri -leaf
 $outputFile = $InstallFile + $outputFileName
-Invoke-WebRequest -Uri $OBSuri -OutFile $outputFile -Verbose
+Invoke-WebRequest -Uri $OBSuri -OutFile $outputFile -UseBasicParsing -Verbose
 Expand-Archive -LiteralPath $outputFile -DestinationPath $stagingFolder\OBS -force -Verbose
 
 # Extract OBS Config
