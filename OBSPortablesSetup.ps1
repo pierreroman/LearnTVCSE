@@ -2,6 +2,10 @@
 # Script body
 # Execution begins here
 #******************************************************************************
+
+$adminUser=$args[0]
+$adminpassword=$args[1]
+
 $logfile = "C:\LearnTV\log\Installation.log"
 Start-Transcript -Path $Logfile
 
@@ -48,8 +52,8 @@ Write-Output "------------------------------------------------------------------
 Write-Output "Set AutoLogin for sysadmin"
 Write-Output "---------------------------------------------------------------------"
 
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name DefaultPassword -Value 'P@ssw0rd1234' -Verbose
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name DefaultUserName -Value 'sysadmin' -Verbose
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name DefaultPassword -Value $adminpassword -Verbose
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name DefaultUserName -Value $adminUser -Verbose
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name AutoAdminLogon -Value '1' -Verbose
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\ServerManager" -Name DoNotOpenServerManagerAtLogon -Value 0 -Type DWord -Verbose
 
@@ -160,4 +164,4 @@ Start-Process .\run.cmd | Wait-Process
 Write-Output "---------------------------------------------------------------------"
 Write-Output "Restart Server"
 Write-Output "---------------------------------------------------------------------"
-Restart-Computer
+# Restart-Computer
