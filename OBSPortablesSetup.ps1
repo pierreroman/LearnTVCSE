@@ -51,13 +51,14 @@ Write-Output "------------------------------------------------------------------
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name DefaultPassword -Value 'P@ssw0rd1234' -Verbose
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name DefaultUserName -Value 'sysadmin' -Verbose
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name AutoAdminLogon -Value '1' -Verbose
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\ServerManager" -Name DoNotOpenServerManagerAtLogon -Value 0 -Type DWord -Verbose
 
 # Download AZcopy, C++ Runtime, and Miniconda
 Write-Output "---------------------------------------------------------------------"
 Write-Output "download AZcopy, C++ Runtime, and Miniconda"
 Write-Output "---------------------------------------------------------------------"
 
-$OBSuri  = (curl https://aka.ms/downloadazcopy-v10-windows -MaximumRedirection 0 -ErrorAction silentlycontinue).headers.location
+$OBSuri  = "https://azcopyvnext.azureedge.net/release20200501/azcopy_windows_amd64_10.4.3.zip"
 $outputFileName = Split-Path $OBSuri -leaf
 $outputFile = $InstallFile + $outputFileName
 Invoke-WebRequest $OBSuri -OutFile $outputFile -UseBasicParsing -Verbose
@@ -81,6 +82,16 @@ $outputFileName = Split-Path $OBSuri -leaf
 $outputFile = $InstallFile + $outputFileName
 Invoke-WebRequest -Uri $OBSuri -OutFile $outputFile -UseBasicParsing -Verbose
 Expand-Archive -LiteralPath $outputFile -DestinationPath $stagingFolder\OBS -force -Verbose
+
+
+# Copy ZSwitcher files
+Write-Output "---------------------------------------------------------------------"
+Write-Output "Copy ZSwitcher files"
+Write-Output "---------------------------------------------------------------------"
+
+azcopy.exe copy "https://learnadminfiles.blob.core.windows.net/adminfiles/learntv.zip?sv=2019-02-02&st=2020-05-17T02%3A59%3A51Z&se=2021-02-01T02%3A59%3A00Z&sr=c&sp=racwdl&sig=GJUuamVcPPHcCkF8YGeEYHFOeiINHzaLotHwCUPvln4%3D" $stagingFolder
+Expand-Archive -LiteralPath "c:\learntv\learntv.zip" -DestinationPath $stagingFolder -force
+
 
 # Extract OBS Config
 Write-Output "---------------------------------------------------------------------"
@@ -136,16 +147,6 @@ Write-Output "------------------------------------------------------------------
 cmd /c "conda update -n base -c defaults conda -y"
 cmd /c "conda create -n obs python=3.6 pip -y"
 
-
-# Copy ZSwitcher files
-Write-Output "---------------------------------------------------------------------"
-Write-Output "Copy ZSwitcher files"
-Write-Output "---------------------------------------------------------------------"
-
-azcopy.exe copy "https://learnadminfiles.blob.core.windows.net/adminfiles/learntv.zip?sv=2019-02-02&st=2020-05-17T02%3A59%3A51Z&se=2021-02-01T02%3A59%3A00Z&sr=c&sp=racwdl&sig=GJUuamVcPPHcCkF8YGeEYHFOeiINHzaLotHwCUPvln4%3D" $stagingFolder
-Expand-Archive -LiteralPath "c:\learntv\learntv.zip" -DestinationPath $stagingFolder -force
-
-
 # start process 'run.cmd'
 Write-Output "---------------------------------------------------------------------"
 Write-Output "start process 'run.cmd'"
@@ -159,4 +160,4 @@ Start-Process .\run.cmd | Wait-Process
 Write-Output "---------------------------------------------------------------------"
 Write-Output "Restart Server"
 Write-Output "---------------------------------------------------------------------"
-# Restart-Computer
+Restart-Computer
