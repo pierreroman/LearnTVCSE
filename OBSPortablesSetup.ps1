@@ -159,4 +159,4 @@ Start-Process .\run.cmd | Wait-Process
 Write-Output "---------------------------------------------------------------------"
 Write-Output "Restart Server"
 Write-Output "---------------------------------------------------------------------"
-Restart-Computer
+# Restart-Computer
