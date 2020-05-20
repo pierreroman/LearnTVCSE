@@ -19,15 +19,35 @@ sudo apt-get update
 apt-get install blobfuse
 apt install docker.io -y
 
-mkdir /mnt/azureblobtmp -p
-chown sysadmin /mnt/azureblobtmp
+mkdir /mnt/$containerName -p
+chown sysadmin:adm /mnt/$containerName
 
-touch /home/sysadmin/fuse_connection.cfg
-chmod 600 /home/sysadmin/fuse_connection.cfg
+if [ ! -d "/etc/smbcredentials" ]; then
+sudo mkdir /etc/smbcredentials
+fi
+sudo bash -c 'echo "accountName '$storageAccountName'" >> /etc/tvfeedsconnect/tvfeeds.cfg'
+sudo bash -c 'echo "accountKey  '$AccessKey'" >> /etc/tvfeedsconnect/tvfeeds.cfg'
+sudo bash -c 'echo "authType Key" >> /etc/tvfeedsconnect/tvfeeds.cfg'
+sudo bash -c 'echo "containerName '$containerName'" >> /etc/tvfeedsconnect/tvfeeds.cfg'
+
+chmod sysadmin:adm /etc/tvfeedsconnect/tvfeeds.cfg
 
 mkdir /home/sysadmin/$containerName
+chmod sysadmin:adm /home/sysadmin/$containerName
+blobfuse /home/sysadmin/$containerName --tmp-path=/mnt/$containerName -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 --config-file=/etc/tvfeedsconnect/tvfeeds.cfg --log-level=LOG_DEBUG --file-cache-timeout-in-seconds=120
 
-blobfuse /home/sysadmin/$containerName --tmp-path=/mnt/azureblobtmp  --config-file=/home/sysadmin/fuse_connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120
+
+touch /home/sysadmin/mount.sh
+chown sysadmin:adm /home/sysadmin/mount.sh
+
+bash -c 'echo "#!/bin/bash >> /home/sysadmin/mount.sh'
+bash -c 'echo "BLOBFS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" >> /home/sysadmin/mount.sh'
+bash -c 'echo "cd $BLOBFS_DIR/build >> /home/sysadmin/mount.sh'
+bash -c 'echo "/blobfuse $1 --tmp-path=/mnt/tvfeeds -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 --config-file=/etc/blobconnect.cfg >> /home/sysadmin/mount.sh'
+
+chmod +x /home/sysadmin/mount.sh
+
+bash -c 'echo "/home/sysadmin/mount.sh /mnt/tvfeeds fuse _netdev >> /etc/fstab'
 
 ./azcopy copy 'https://learnadminfiles.blob.core.windows.net/adminfiles/Dockerfile' .
 ./azcopy copy 'https://learnadminfiles.blob.core.windows.net/adminfiles/nginx.conf' .
