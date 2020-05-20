@@ -19,18 +19,6 @@ sudo apt-get update
 apt-get install blobfuse
 apt install docker.io -y
 
-#mkdir /mnt/resource/blobfusetmp -p
-#chown sysadmin /mnt/resource/blobfusetmp
-
-#if [ ! -d "/etc/smbcredentials" ]; then
-#    mkdir /etc/smbcredentials
-#fi
-#if [ ! -f "/etc/smbcredentials/'$fileShareName'.cred" ]; then
-#    bash -c 'echo "accountName '$storageAccountName'" >> /etc/smbcredentials/'$fileShareName'.cred'
-#    bash -c 'echo "accountKey '$AccessKey'" >> /etc/smbcredentials/'$fileShareName'.cred'
-#fi
-
-
 
 ./azcopy copy 'https://learnadminfiles.blob.core.windows.net/adminfiles/Dockerfile' .
 ./azcopy copy 'https://learnadminfiles.blob.core.windows.net/adminfiles/nginx.conf' .

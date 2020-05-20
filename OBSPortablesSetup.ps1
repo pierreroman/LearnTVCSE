@@ -91,9 +91,6 @@ $storageAccount=$args[2]
 $shareName=$args[3]
 $storageKey=$args[4]
 
-#Add-Content -Path c:\learntv\setup.ps1 -Value "powershell -ExecutionPolicy Unrestricted -File C:\Packages\Plugins\Microsoft.Compute.CustomScriptExtension\1.10.8\Downloads\0\OBSPortablesSetup.ps1 $adminUser $adminpassword $storageAccount $shareName $storageKey"
-
-
 Write-Log -Message "---------------------------------------------------------------------" -Path $Logpathandfile
 Write-Log -Message "---------------------------------------------------------------------" -Path $Logpathandfile
 Write-Log -Message "Start Config Server Creation Process. on $starttime" -Path $Logpathandfile

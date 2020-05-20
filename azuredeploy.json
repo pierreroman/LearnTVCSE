@@ -213,14 +213,6 @@
             }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
-            "apiVersion": "2019-06-01",
-            "name": "[concat(variables('uniqueStorageName'), '/default/', variables('FileShareName'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('uniqueStorageName'))]"
-            ]
-        },
-        {
             "type": "Microsoft.Network/azureFirewalls",
             "apiVersion": "2019-12-01",
             "name": "[variables('FW-LearnTV-Name')]",
@@ -603,7 +595,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://learnadminfiles.blob.core.windows.net/adminfiles/SetupRTMP.sh?sv=2019-02-02&st=2020-05-18T03%3A34%3A04Z&se=2021-05-19T03%3A34%3A00Z&sr=b&sp=r&sig=Ch9MKj%2BUBpgqgJmL6x9k2BpEB76%2BwDc5R33EWbjrvRM%3D"
+                        "https://raw.githubusercontent.com/pierreroman/LearnTVCSE/master/SetupRTMP.sh"
                     ]
                 },
                 "protectedSettings": {
@@ -680,7 +672,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://learnadminfiles.blob.core.windows.net/adminfiles/OBSPortablesSetup.ps1?sv=2019-02-02&st=2020-05-18T03%3A34%3A53Z&se=2021-05-19T03%3A34%3A00Z&sr=b&sp=r&sig=PvUhrFcBSCBfK8huCCZ6Pbm4HGcSqalcEgqBzBx3z1w%3D"
+                        "https://raw.githubusercontent.com/pierreroman/LearnTVCSE/master/OBSPortablesSetup.ps1"
                     ]
                 },
                 "protectedSettings": {
