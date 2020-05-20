@@ -250,7 +250,6 @@ Write-Log -Message "Update MiniConda & create OBS environment..." -Path $Logpath
 cmd /c "conda update -n base -c defaults conda -y"
 cmd /c "conda create -n obs python=3.6 pip -y"
 
-# Edit global.ini
 Write-Log -Message  "---------------------------------------------------------------------" -Path $Logpathandfile
 Write-Log -Message  "Edit global.ini" -Path $Logpathandfile
 Write-Log -Message  "---------------------------------------------------------------------" -Path $Logpathandfile
@@ -263,9 +262,8 @@ Write-Log -Message "$iniContent"  -Path $Logpathandfile
 $iniContent["Python"]["Path64bit"] = "C:/ProgramData/Miniconda3/envs/obs"
 Write-Log -Message "----------------------------------------------------------------------"  -Path $Logpathandfile
 Write-Log -Message "$iniContent"  -Path $Logpathandfile
-$iniContent | Out-IniFile -FilePath "C:\learntv\obs-config\config\obs-studio\global.ini" -Force -Verbose
+$iniContent | Out-IniFile -FilePath "C:\learntv\OBS\config\obs-studio\global.ini" -Force -Verbose
 
-# start process 'run.cmd'
 Write-Log -Message  "---------------------------------------------------------------------" -Path $Logpathandfile
 Write-Log -Message  "start process 'run.cmd'" -Path $Logpathandfile
 Write-Log -Message  "---------------------------------------------------------------------" -Path $Logpathandfile

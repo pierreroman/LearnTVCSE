@@ -33,7 +33,7 @@ sudo bash -c 'echo "containerName '$containerName'" >> /etc/tvfeedsconnect/tvfee
 chmod sysadmin:adm /etc/tvfeedsconnect/tvfeeds.cfg
 
 mkdir /home/sysadmin/$containerName
-chmod sysadmin:adm /home/sysadmin/$containerName
+chown sysadmin:adm /home/sysadmin/$containerName
 blobfuse /home/sysadmin/$containerName --tmp-path=/mnt/$containerName -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 --config-file=/etc/tvfeedsconnect/tvfeeds.cfg --log-level=LOG_DEBUG --file-cache-timeout-in-seconds=120
 
 
