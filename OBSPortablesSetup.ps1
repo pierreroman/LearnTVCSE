@@ -217,7 +217,11 @@ Write-Log -Message  "-----------------------------------------------------------
 Write-Log -Message "Modifying Global.ini to update Python env path...." -Path $Logpathandfile
 $result=Get-ChildItem -Path $stagingFolder -Include global.ini -File -Recurse -ErrorAction SilentlyContinue -Verbose
 $iniContent = Get-IniContent $result.FullName -Verbose
+Write-Log -Message "----------------------------------------------------------------------"  -Path $Logpathandfile
+Write-Log -Message "$iniContent"  -Path $Logpathandfile
 $iniContent["Python"]["Path64bit"] = "C:/ProgramData/Miniconda3/envs/obs"
+Write-Log -Message "----------------------------------------------------------------------"  -Path $Logpathandfile
+Write-Log -Message "$iniContent"  -Path $Logpathandfile
 $iniContent | Out-IniFile -FilePath "C:\learntv\obs-config\config\obs-studio\global.ini" -Force -Verbose
 
 # Set Run key to start restart.ps1
