@@ -599,7 +599,7 @@
                     ]
                 },
                 "protectedSettings": {
-                    "commandToExecute": "[concat('sudo sh SetupRTMP.sh ', resourceGroup().name, ' ' ,variables('uniqueStorageName'), ' ', variables('FileShareName'), ' ', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('uniqueStorageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+                    "commandToExecute": "[concat('sudo sh SetupRTMP.sh ', resourceGroup().name, ' ' ,variables('uniqueStorageName'), ' ', 'tvfeeds', ' ', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('uniqueStorageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
                 }
             }
         },

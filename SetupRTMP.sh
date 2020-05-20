@@ -3,7 +3,7 @@
 
 resourceGroupName=$1
 storageAccountName=$2
-fileShareName=$3
+containerName=$3
 AccessKey=$4
 
 #	Update package index
@@ -19,6 +19,15 @@ sudo apt-get update
 apt-get install blobfuse
 apt install docker.io -y
 
+mkdir /mnt/azureblobtmp -p
+chown sysadmin /mnt/azureblobtmp
+
+touch /home/sysadmin/fuse_connection.cfg
+chmod 600 /home/sysadmin/fuse_connection.cfg
+
+mkdir /home/sysadmin/$containerName
+
+blobfuse /home/sysadmin/$containerName --tmp-path=/mnt/azureblobtmp  --config-file=/home/sysadmin/fuse_connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120
 
 ./azcopy copy 'https://learnadminfiles.blob.core.windows.net/adminfiles/Dockerfile' .
 ./azcopy copy 'https://learnadminfiles.blob.core.windows.net/adminfiles/nginx.conf' .
@@ -33,6 +42,6 @@ cp nginx.conf /home/sysadmin
 cd /home/sysadmin
 
 docker build --tag=c9rtmp .
-#docker run -p 1935:1935 -p 8080:8080 -v "/mnt/saltv1fwfinzhrtysgc:/data" --restart unless-stopped --detach c9rtmp
+docker run -p 1935:1935 -p 8080:8080 -v "/home/sysadmin/$containerName:/data" --restart unless-stopped --detach c9rtmp
 
 usermod -aG docker sysadmin
