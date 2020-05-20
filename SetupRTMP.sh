@@ -22,8 +22,8 @@ apt install docker.io -y
 mkdir /mnt/$containerName -p
 chown sysadmin:adm /mnt/$containerName
 
-if [ ! -d "/etc/smbcredentials" ]; then
-sudo mkdir /etc/smbcredentials
+if [ ! -d "/etc/tvfeedsconnect" ]; then
+sudo mkdir /etc/tvfeedsconnect
 fi
 sudo bash -c 'echo "accountName '$storageAccountName'" >> /etc/tvfeedsconnect/tvfeeds.cfg'
 sudo bash -c 'echo "accountKey  '$AccessKey'" >> /etc/tvfeedsconnect/tvfeeds.cfg'
