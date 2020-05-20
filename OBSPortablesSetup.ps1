@@ -85,11 +85,9 @@ $starttime = get-date
 $stagingFolder = "c:\learntv\" 
 $InstallFile = "c:\install\"
 $Logpathandfile = "c:\Scriptoutput.log"
+$LearnTVZipLocation = "https://learnadminfiles.blob.core.windows.net/testing/learntv.zip?sv=2019-02-02&st=2020-05-20T13%3A31%3A00Z&se=2021-05-21T13%3A31%3A00Z&sr=b&sp=r&sig=zqYhBZTaIkcu7Hc%2FePl3Iaqs4WhJTzzQvzQmLmYvd4U%3D"
 $adminUser=$args[0]
 $adminpassword=$args[1]
-$storageAccount=$args[2]
-$shareName=$args[3]
-$storageKey=$args[4]
 
 Write-Log -Message "---------------------------------------------------------------------" -Path $Logpathandfile
 Write-Log -Message "---------------------------------------------------------------------" -Path $Logpathandfile
@@ -103,9 +101,7 @@ Write-Log -Message "------------------------------------------------------------
 Write-Log -Message "Setting variables from ARM deployment" -Path $Logpathandfile
 Write-Log -Message $adminUser -Path $Logpathandfile
 Write-Log -Message $adminpassword -Path $Logpathandfile
-Write-Log -Message $storageAccount -Path $Logpathandfile
-Write-Log -Message $shareName -Path $Logpathandfile
-Write-Log -Message $storageKey -Path $Logpathandfile
+
 
 Write-Log -Message "---------------------------------------------------------------------" -Path $Logpathandfile
 Write-Log -Message "Install Powershell Module" -Path $Logpathandfile
@@ -198,7 +194,7 @@ Write-Log -Message  "Copy ZSwitcher files" -Path $Logpathandfile
 Write-Log -Message  "---------------------------------------------------------------------" -Path $Logpathandfile
 
 Write-Log -Message "Downloading Learntv.zip Package...." -Path $Logpathandfile
-C:\learntv\azcopy.exe copy "https://learnadminfiles.blob.core.windows.net/adminfiles/learntv.zip?sv=2019-02-02&st=2020-05-17T02%3A59%3A51Z&se=2021-02-01T02%3A59%3A00Z&sr=c&sp=racwdl&sig=GJUuamVcPPHcCkF8YGeEYHFOeiINHzaLotHwCUPvln4%3D" $stagingFolder
+C:\learntv\azcopy.exe copy $LearnTVZipLocation $stagingFolder
 Write-Log -Message "Expanding Learntv.zip Package to $stagingFolder...." -Path $Logpathandfile
 Expand-Archive -LiteralPath "c:\learntv\learntv.zip" -DestinationPath $stagingFolder -force
 
@@ -210,7 +206,7 @@ Write-Log -Message  "Update download.json with admin file url" -Path $Logpathand
 Write-Log -Message  "---------------------------------------------------------------------" -Path $Logpathandfile
 
 $a = Get-Content 'c:\learntv\download_example.json' -raw | ConvertFrom-Json
-$a.url="https://learnadminfiles.blob.core.windows.net/adminfiles/learntv.zip?sv=2019-02-02&st=2020-05-17T02%3A59%3A51Z&se=2021-02-01T02%3A59%3A00Z&sr=c&sp=racwdl&sig=GJUuamVcPPHcCkF8YGeEYHFOeiINHzaLotHwCUPvln4%3D"
+$a.url = $LearnTVZipLocation
 $a | ConvertTo-Json -depth 32| set-content 'c:\learntv\download.json'
 
 # Edit global.ini
@@ -222,7 +218,7 @@ Write-Log -Message "Modifying Global.ini to update Python env path...." -Path $L
 $result=Get-ChildItem -Path $stagingFolder -Include global.ini -File -Recurse -ErrorAction SilentlyContinue -Verbose
 $iniContent = Get-IniContent $result.FullName -Verbose
 $iniContent["Python"]["Path64bit"] = "C:/ProgramData/Miniconda3/envs/obs"
-$iniContent | Out-IniFile -FilePath $result.FullName -Force -Verbose
+$iniContent | Out-IniFile -FilePath "C:\learntv\obs-config\config\obs-studio\global.ini" -Force -Verbose
 
 # Set Run key to start restart.ps1
 Write-Log -Message  "---------------------------------------------------------------------" -Path $Logpathandfile

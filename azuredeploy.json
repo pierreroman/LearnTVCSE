@@ -676,7 +676,7 @@
                     ]
                 },
                 "protectedSettings": {
-                    "commandToExecute": "[concat ('powershell -ExecutionPolicy Unrestricted -File ', 'OBSPortablesSetup.ps1', ' ', 'sysadm', ' ', parameters('adminPassword'), ' ', variables('uniqueStorageName'), ' ', variables('FileShareName'), ' ', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('uniqueStorageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+                    "commandToExecute": "[concat ('powershell -ExecutionPolicy Unrestricted -File ', 'OBSPortablesSetup.ps1', ' ', 'sysadm', ' ', parameters('adminPassword'))]"
                 }
             }
         }
