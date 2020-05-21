@@ -14,7 +14,7 @@ pool:
   inputs:
     command: publish
     publishDirectory: '$(Build.ArtifactStagingDirectory)'
-    vstsFeedPublish: '<projectName>/<feedName>'
+    vstsFeedPublish: '$(ProjectName)/$(feedName)'
     vstsFeedPackagePublish: '<Package name>'
     versionOption: custom
     versionPublish: '<Package version>'
