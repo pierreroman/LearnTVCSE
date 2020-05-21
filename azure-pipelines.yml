@@ -9,16 +9,13 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-- task: UniversalPackages@0
-  displayName: LearnTv deployment files Publish
+- task: CopyFiles@2
   inputs:
-    command: publish
-    publishDirectory: '$(Build.ArtifactStagingDirectory)'
-    vstsFeedPublish: '$(ProjectName)/$(feedName)'
-    vstsFeedPackagePublish: '<Package name>'
-    versionOption: custom
-    versionPublish: '<Package version>'
-    packagePublishDescription: '<Package description>'
+    SourceFolder: '$(Build.SourcesDirectory)/deploy'
+    Contents: '?(*.json)'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+
 
 
 
