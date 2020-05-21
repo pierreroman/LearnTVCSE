@@ -15,3 +15,21 @@ steps:
     SourceFolder: '$(Build.SourcesDirectory)/Deploy'
     Contents: '?(*.json)'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'CA-Pierrer-Demo-Test'
+    subscriptionId: '54a522b6-6cd7-4325-b4e6-566f9d921835'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'LearnTVv2'
+    location: 'East US'
+    templateLocation: 'Linked artifact'
+    csmFile: 'Deploy\azuredeploy-pipeline.json'
+    overrideParameters: '-adminUsername $(adminUsername) -adminPassword (ConvertTo-SecureString -String $(vmpassword) -AsPlainText -Force) -envName ($envName)'
+    deploymentMode: 'Incremental'
+
+
+
+
+
