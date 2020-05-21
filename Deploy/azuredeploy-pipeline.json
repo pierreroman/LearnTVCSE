@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "ProjectName": {
+        "envName": {
             "type": "string",
             "defaultValue": "LTV",
             "minLength": 1,
@@ -11,9 +11,16 @@
                 "description": "Name of the project. keep the name between 3 and 9 caracters"
             }
         },
+        "adminUsername": {
+            "type": "string",
+            "defaultValue": "sysadmin",
+            "metadata": {
+                "description": "Administrator name"
+            }
+        }
         "adminPassword": {
             "type": "securestring",
-            "defaultValue": "[concat('vnet-',parameters('ProjectName'))]",
+            "defaultValue": "[concat('vnet-',parameters('envName'))]",
             "metadata": {
                 "description": "Sysadmin Password for OBS vms and Linux VM"
             }
@@ -22,23 +29,23 @@
     "functions": [
     ],
     "variables": {
-        "VNet-LearnTV-Name": "[concat('vnet-',parameters('ProjectName'))]",
-        "FW-LearnTV-Name": "[concat('fw-',parameters('ProjectName'))]",
+        "VNet-LearnTV-Name": "[concat('vnet-',parameters('envName'))]",
+        "FW-LearnTV-Name": "[concat('fw-',parameters('envName'))]",
         "location": "[resourceGroup().location]",
-        "routeTables_FW_Route_name": "[concat('fw-route-',parameters('ProjectName'))]",
-        "uniqueStorageName": "[toLower(concat('sa',parameters('ProjectName'),uniqueString(resourceGroup().id)))]",
-        "FileShareName": "[toLower(concat('fs',parameters('ProjectName'), uniqueString(resourceGroup().id)))]",
+        "routeTables_FW_Route_name": "[concat('fw-route-',parameters('envName'))]",
+        "uniqueStorageName": "[toLower(concat('sa',parameters('envName'),uniqueString(resourceGroup().id)))]",
+        "FileShareName": "[toLower(concat('fs',parameters('envName'), uniqueString(resourceGroup().id)))]",
         "routeTables_FW_Route_id": "[resourceId('Microsoft.Network/routeTables', variables('routeTables_FW_Route_name'))]",
         "virtual_Networks_id": "[resourceid('Microsoft.Network/virtualNetworks',variables('VNet-LearnTV-Name'))]",
-        "public_IP_Address_Name": "[concat('IP-',parameters('ProjectName'),'-public')]",
+        "public_IP_Address_Name": "[concat('IP-',parameters('envName'),'-public')]",
         "public_IP_Address_id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('public_IP_Address_Name'))]",
         "azureFirewallSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('VNet-LearnTV-Name'), 'AzureFirewallSubnet')]",
-        "bastionHosts_BS_LearnLive_name": "[concat('bastion-',parameters('ProjectName'))]",
-        "bastionHosts_IP": "[concat('bastion-IP-',parameters('ProjectName'))]",
+        "bastionHosts_BS_LearnLive_name": "[concat('bastion-',parameters('envName'))]",
+        "bastionHosts_IP": "[concat('bastion-IP-',parameters('envName'))]",
         "fw_subnet_prefix": "10.0.0.0/24",
         "internal_subnet_prefix": "10.0.1.0/24",
         "Bastion_subnet_prefix": "10.0.254.0/24",
-        "windowsVMstorage": "[tolower(concat('win',parameters('ProjectName'),uniqueString(resourceGroup().id)))]",
+        "windowsVMstorage": "[tolower(concat('win',parameters('envName'),uniqueString(resourceGroup().id)))]",
         "obsvmname": "WinOBS",
         "vmExtensionName": "nvidiadrivers"
     },
@@ -55,7 +62,7 @@
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Static",
                 "dnsSettings": {
-                    "domainNameLabel": "[toLower(concat('bastion',parameters('ProjectName'),'2'))]"
+                    "domainNameLabel": "[toLower(concat('bastion',parameters('envName'),'2'))]"
                 }
             }
         },
@@ -71,14 +78,14 @@
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Static",
                 "dnsSettings": {
-                    "domainNameLabel": "[toLower(concat(parameters('ProjectName'),'rtmp'))]"
+                    "domainNameLabel": "[toLower(concat(parameters('envName'),'rtmp'))]"
                 }
             }
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2019-11-01",
-            "name": "[concat('NSG-',parameters('ProjectName'))]",
+            "name": "[concat('NSG-',parameters('envName'))]",
             "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
@@ -92,7 +99,7 @@
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceid('Microsoft.Network/routeTables',variables('routeTables_FW_Route_name'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups',concat('NSG-',parameters('ProjectName')))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups',concat('NSG-',parameters('envName')))]"
             ],
             "tags": {
                 "displayName": "[variables('VNet-LearnTV-Name')]"
@@ -124,7 +131,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups',concat('NSG-',parameters('ProjectName')))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups',concat('NSG-',parameters('envName')))]"
                             }
                         }
                     },
@@ -551,7 +558,7 @@
                 },
                 "osProfile": {
                     "computerName": "Linux-RTMP",
-                    "adminUsername": "sysadmin",
+                    "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
                 "storageProfile": {
@@ -591,7 +598,7 @@
                 },
                 "osProfile": {
                     "computerName": "WinOBS",
-                    "adminUsername": "sysadmin ",
+                    "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
                 "storageProfile": {
