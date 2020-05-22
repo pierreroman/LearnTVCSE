@@ -15,7 +15,7 @@ steps:
     azureSubscription: 'deployServicePrincipal'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
-    inlineScript: 'Remove-AzResourceGroup -Name $(rgName)'
+    inlineScript: 'az group delete --name $(rgName)'
 
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
