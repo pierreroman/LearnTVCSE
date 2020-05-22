@@ -209,7 +209,7 @@
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('VNet-LearnTV-Name'), 'AzureFirewallSubnet')]",
-                "[resourceId('Microsoft.Network/publicIPAddresses',variables('public_IP_Address_Name'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses',variables('public_IP_Address_Name'))]"
             ],
             "properties": {
                 "sku": {
