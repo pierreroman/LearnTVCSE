@@ -234,38 +234,7 @@
                     }
                 ],
                 "networkRuleCollections": [
-                    {
-                        "name": "Net-RTMP-Inbound",
-                        "properties": {
-                            "priority": 300,
-                            "action": {
-                                "type": "Allow"
-                            },
-                            "rules": [
-                                {
-                                    "name": "RMTP",
-                                    "protocols": [
-                                        "TCP"
-                                    ],
-                                    "sourceAddresses": [
-                                        "*"
-                                    ],
-                                    "destinationAddresses": [
-                                        "[reference('ubuntuVM1-NetworkInterface').ipConfigurations[0].properties.privateIPAddress]"
-                                    ],
-                                    "sourceIpGroups": [
-                                    ],
-                                    "destinationIpGroups": [
-                                    ],
-                                    "destinationFqdns": [
-                                    ],
-                                    "destinationPorts": [
-                                        "1935"
-                                    ]
-                                }
-                            ]
-                        }
-                    },
+
                     {
                         "name": "Net-ALLvm-Outbound",
                         "properties": {
@@ -368,42 +337,8 @@
                         }
                     }
                 ],
-                "applicationRuleCollections": [
-                ],
-                "natRuleCollections": [
-                    {
-                        "name": "Inbound-DNAT",
-                        "properties": {
-                            "priority": 200,
-                            "action": {
-                                "type": "Dnat"
-                            },
-                            "rules": [
-                                {
-                                    "name": "DNAT-01",
-                                    "protocols": [
-                                        "TCP",
-                                        "UDP"
-                                    ],
-
-                                    "translatedAddress": "[reference('ubuntuVM1-NetworkInterface').ipConfigurations[0].properties.privateIPAddress]",
-                                    "translatedPort": "1935",
-                                    "sourceAddresses": [
-                                        "*"
-                                    ],
-                                    "sourceIpGroups": [
-                                    ],
-                                    "destinationAddresses": [
-                                        "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('public_IP_Address_Name'))).IpAddress]"
-                                    ],
-                                    "destinationPorts": [
-                                        "1935"
-                                    ]
-                                }
-                            ]
-                        }
-                    }
-                ]
+                "applicationRuleCollections": [],
+                "natRuleCollections": []
             }
         },
         {
