@@ -1,15 +1,15 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "envName": {
-            "Value": "ptv"
+            "value": "ptv"
         },
         "adminUsername": {
-            "Value": "sysadmin"
+            "value": "sysadmin"
         },
         "adminPassword": {
-            "Value": "password"
+            "value": "P@ssw0rd1234"
         }
     }
 }

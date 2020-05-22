@@ -17,7 +17,7 @@
             "metadata": {
                 "description": "Administrator name"
             }
-        }
+        },
         "adminPassword": {
             "type": "securestring",
             "defaultValue": "[concat('vnet-',parameters('envName'))]",
@@ -34,7 +34,6 @@
         "location": "[resourceGroup().location]",
         "routeTables_FW_Route_name": "[concat('fw-route-',parameters('envName'))]",
         "uniqueStorageName": "[toLower(concat('sa',parameters('envName'),uniqueString(resourceGroup().id)))]",
-        "FileShareName": "[toLower(concat('fs',parameters('envName'), uniqueString(resourceGroup().id)))]",
         "routeTables_FW_Route_id": "[resourceId('Microsoft.Network/routeTables', variables('routeTables_FW_Route_name'))]",
         "virtual_Networks_id": "[resourceid('Microsoft.Network/virtualNetworks',variables('VNet-LearnTV-Name'))]",
         "public_IP_Address_Name": "[concat('IP-',parameters('envName'),'-public')]",
@@ -637,14 +636,6 @@
         }
     ],
     "outputs": {
-        "storageEndpoint": {
-            "type": "object",
-            "value": "[reference(variables('uniqueStorageName')).primaryEndpoints]"
-        },
-        "STORAGEKEY": {
-            "type": "string",
-            "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('uniqueStorageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
-        },
         "FQDN": {
             "type": "string",
             "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('public_IP_Address_Name'))).dnsSettings.fqdn]"
