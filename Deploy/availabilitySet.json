@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "availabilitySetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Availability Set Name"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "location": "[resourceGroup().location]"
+    },
+    "resources": [
+        {
+            "name": "[parameters('availabilitySetName')]",
+            "type": "Microsoft.Compute/availabilitySets",
+            "apiVersion": "2019-07-01",
+            "location": "[variables('location')]",
+            "tags": {
+                "displayName": "[parameters('availabilitySetName')]"
+            },
+            "properties": {
+            }
+        }
+    ],
+    "outputs": {
+        "availabilitySetID": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Compute/availabilitySets',parameters('availabilitySetName'))]"
+        }
+    }
+}
