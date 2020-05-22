@@ -29,5 +29,5 @@ steps:
     location: 'East US'
     templateLocation: 'Linked artifact'
     csmFile: 'Deploy/azuredeploy-pipeline.json'
-    overrideParameters: '-envName $(envName) -adminUsername $(adminUsername) -adminPassword (ConvertTo-SecureString -String $(adminPassword) -AsPlainText -Force)'
+    overrideParameters: '-envName $(envName)'
     deploymentMode: 'Complete'
