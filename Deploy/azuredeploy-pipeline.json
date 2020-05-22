@@ -10,20 +10,6 @@
             "metadata": {
                 "description": "Name of the project. keep the name between 3 and 9 caracters"
             }
-        },
-        "adminUsername": {
-            "type": "string",
-            "defaultValue": "sysadmin",
-            "metadata": {
-                "description": "Administrator name"
-            }
-        },
-        "adminPassword": {
-            "type": "securestring",
-            "defaultValue": "[concat('vnet-',parameters('envName'))]",
-            "metadata": {
-                "description": "Sysadmin Password for OBS vms and Linux VM"
-            }
         }
     },
     "functions": [
@@ -44,9 +30,7 @@
         "fw_subnet_prefix": "10.0.0.0/24",
         "internal_subnet_prefix": "10.0.1.0/24",
         "Bastion_subnet_prefix": "10.0.254.0/24",
-        "windowsVMstorage": "[tolower(concat('win',parameters('envName'),uniqueString(resourceGroup().id)))]",
-        "obsvmname": "WinOBS",
-        "vmExtensionName": "nvidiadrivers"
+        "windowsVMstorage": "[tolower(concat('win',parameters('envName'),uniqueString(resourceGroup().id)))]"
     },
     "resources": [
         {
@@ -491,147 +475,6 @@
             "sku": {
                 "name": "Premium_LRS",
                 "tier": "Premium"
-            }
-        },
-        {
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "obsnic",
-            "apiVersion": "2019-12-01",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('VNet-LearnTV-Name'))]"
-            ],
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('VNet-LearnTV-Name'),'internal')]"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "name": "ubuntuVM1-NetworkInterface",
-            "type": "Microsoft.Network/networkInterfaces",
-            "apiVersion": "2019-11-01",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('VNet-LearnTV-Name'))]"
-            ],
-            "tags": {
-                "displayName": "ubuntuVM1-NetworkInterface"
-            },
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipConfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('VNet-LearnTV-Name'),'internal')]"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "name": "Linux-RTMP",
-            "type": "Microsoft.Compute/virtualMachines",
-            "apiVersion": "2019-07-01",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', 'ubuntuVM1-NetworkInterface')]"
-            ],
-            "tags": {
-                "displayName": "Linux-RTMP"
-            },
-            "properties": {
-                "hardwareProfile": {
-                    "vmSize": "Standard_D8s_v3"
-                },
-                "osProfile": {
-                    "computerName": "Linux-RTMP",
-                    "adminUsername": "[parameters('adminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]"
-                },
-                "storageProfile": {
-                    "imageReference": {
-                        "publisher": "Canonical",
-                        "offer": "UbuntuServer",
-                        "sku": "18.04-LTS",
-                        "version": "latest"
-                    },
-                    "osDisk": {
-                        "name": "ubuntuVM1-OSDisk",
-                        "caching": "ReadWrite",
-                        "createOption": "FromImage"
-                    }
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ubuntuVM1-NetworkInterface')]"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Compute/virtualMachines",
-            "name": "[variables('obsvmname')]",
-            "apiVersion": "2019-07-01",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts',variables('windowsVMstorage'))]",
-                "[resourceId('Microsoft.Compute/virtualMachines','Linux-RTMP')]"
-            ],
-            "properties": {
-                "hardwareProfile": {
-                    "vmSize": "Standard_NV6"
-                },
-                "osProfile": {
-                    "computerName": "WinOBS",
-                    "adminUsername": "[parameters('adminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]"
-                },
-                "storageProfile": {
-                    "imageReference": {
-                        "publisher": "MicrosoftWindowsServer",
-                        "offer": "WindowsServer",
-                        "sku": "2019-Datacenter",
-                        "version": "latest"
-                    }
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', 'obsnic')]"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('obsvmname'),'/', variables('vmExtensionName'))]",
-            "apiVersion": "2016-04-30-preview",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines', variables('obsvmname'))]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.HpcCompute",
-                "type": "NvidiaGpuDriverWindows",
-                "typeHandlerVersion": "1.3",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                }
             }
         }
     ],

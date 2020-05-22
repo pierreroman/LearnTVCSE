@@ -4,12 +4,6 @@
     "parameters": {
         "envName": {
             "value": "ptv"
-        },
-        "adminUsername": {
-            "value": "sysadmin"
-        },
-        "adminPassword": {
-            "value": "P@ssw0rd1234"
         }
     }
 }
