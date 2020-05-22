@@ -10,6 +10,15 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+
+- task: AzurePowerShell@5
+  inputs:
+    azureSubscription: 'deployServicePrincipal'
+    ScriptType: 'FilePath'
+    ScriptPath: 'rgCheck.ps1'
+    ScriptArguments: '$(rgName)'
+    azurePowerShellVersion: 'LatestVersion'
+    
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
     deploymentScope: 'Resource Group'
