@@ -25,8 +25,8 @@ steps:
     resourceGroupName: 'LearnTVv2'
     location: 'East US'
     templateLocation: 'Linked artifact'
-    csmFile: 'Deploy\azuredeploy-pipeline.json'
-    csmParametersFile: 'Deploy\azuredeploy-pipeline-parameters.json'
+    csmFile: 'azuredeploy-pipeline.json'
+    csmParametersFile: 'azuredeploy-pipeline-parameters.json'
     overrideParameters: '-adminUsername $(adminUsername) -adminPassword (ConvertTo-SecureString -String $(vmpassword) -AsPlainText -Force) -envName ($envName)'
     deploymentMode: 'Incremental'
 
