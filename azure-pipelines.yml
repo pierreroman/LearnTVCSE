@@ -10,13 +10,20 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'deployServicePrincipal'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'Remove-AzResourceGroup -Name $(rgName)'
+
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
     deploymentScope: 'Resource Group'
     azureResourceManagerConnection: 'deployServicePrincipal'
     subscriptionId: '54a522b6-6cd7-4325-b4e6-566f9d921835'
     action: 'Create Or Update Resource Group'
-    resourceGroupName: 'LearnTVv2'
+    resourceGroupName: '$(rgName)'
     location: 'East US'
     templateLocation: 'Linked artifact'
     csmFile: 'Deploy/azuredeploy-pipeline.json'
