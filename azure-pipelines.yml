@@ -10,12 +10,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: AzureCLI@2
+- task: AzurePowerShell@5
   inputs:
     azureSubscription: 'deployServicePrincipal'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: 'az group delete --name $(rgName)'
+    ScriptType: 'FilePath'
+    ScriptPath: 'rgCheck.ps1'
+    ScriptArguments: '$(rgName)'
+    azurePowerShellVersion: 'LatestVersion'
 
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
