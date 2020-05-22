@@ -28,9 +28,5 @@ steps:
     csmFile: 'azuredeploy-pipeline.json'
     csmParametersFile: 'azuredeploy-pipeline-parameters.json'
     overrideParameters: '-adminUsername $(adminUsername) -adminPassword (ConvertTo-SecureString -String $(vmpassword) -AsPlainText -Force) -envName ($envName)'
-    deploymentMode: 'Incremental'
-
-
-
-
-
+    deploymentMode: 'Complete'
+    deploymentOutputs: 'output'
