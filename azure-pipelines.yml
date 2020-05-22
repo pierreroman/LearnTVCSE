@@ -1,0 +1,24 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'deployServicePrincipal'
+    subscriptionId: '54a522b6-6cd7-4325-b4e6-566f9d921835'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'LearnTVv2'
+    location: 'East US'
+    templateLocation: 'Linked artifact'
+    csmFile: 'Deploy/azuredeploy-pipeline.json'
+    overrideParameters: '-envName $(envName) -adminUsername $(adminUsername) -adminPassword (ConvertTo-SecureString -String $(adminPassword)'
+    deploymentMode: 'Complete'
