@@ -19,22 +19,6 @@ variables:
 
 steps:
 
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'deployServicePrincipal'
-    scriptType: 'batch'
-    scriptLocation: 'inlineScript'
-    inlineScript: 'az acr create --resource-group $(rgName) --name $(containerRegistryName) --sku Basic'
-
-task: Docker@2
-  displayName: Build and push an image to container registry
-  inputs:
-    command: buildAndPush
-    repository: $(imageRepository)
-    dockerfile: $(dockerfilePath)
-    containerRegistry: $(containerRegistryName)
-    tag: $(tag)
-
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
     deploymentScope: 'Resource Group'
@@ -48,3 +32,9 @@ task: Docker@2
     overrideParameters: '-envName $(envName)'
     deploymentMode: 'Complete'
 
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'deployServicePrincipal'
+    scriptType: 'batch'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az acr create --resource-group $(rgName) --name $(containerRegistryName) --sku Basic'
