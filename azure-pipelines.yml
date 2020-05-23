@@ -35,6 +35,13 @@ steps:
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'deployServicePrincipal'
-    scriptType: 'batch'
+    scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: 'az acr create --resource-group $(rgName) --name $(containerRegistryName) --sku Basic'
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'deployServicePrincipal'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az acr build --registry $containerRegistryName --file Docker/Dockerfile --image c9rtmp:v1 .'
