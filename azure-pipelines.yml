@@ -26,12 +26,12 @@ steps:
     azureResourceManagerConnection: 'deployServicePrincipal'
     subscriptionId: '54a522b6-6cd7-4325-b4e6-566f9d921835'
     action: 'Create Or Update Resource Group'
-    resourceGroupName: '$(rgName)'
-    location: '$(location)''
+    resourceGroupName: 'LearnTVv2'
+    location: 'East US'
     templateLocation: 'Linked artifact'
     csmFile: 'Deploy/azuredeploy-pipeline.json'
     overrideParameters: '-envName $(envName)'
-    deploymentMode: 'Complete'
+    deploymentMode: 'Incremental'
 
 - task: AzureCLI@2
   inputs:
