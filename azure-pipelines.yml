@@ -11,6 +11,7 @@ pool:
 
 variables:
   rgName: 'LearnTVv2'
+  location: 'eastus'
   imageName: 'LearnTV-RTMP'
   DOCKER_BUILDKIT: 1
   containerRegistryName: 'ltvACR'
@@ -26,7 +27,7 @@ steps:
     subscriptionId: '54a522b6-6cd7-4325-b4e6-566f9d921835'
     action: 'Create Or Update Resource Group'
     resourceGroupName: '$(rgName)'
-    location: 'East US'
+    location: '$(location)''
     templateLocation: 'Linked artifact'
     csmFile: 'Deploy/azuredeploy-pipeline.json'
     overrideParameters: '-envName $(envName)'
@@ -35,13 +36,14 @@ steps:
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'deployServicePrincipal'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: 'az acr create --resource-group $(rgName) --name $(containerRegistryName) --sku Basic'
+    scriptType: 'pscore'
+    scriptLocation: 'scriptPath'
+    scriptPath: 'acr.ps1'
+    arguments: '$(rgName) $(containerRegistryName)'
 
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'deployServicePrincipal'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
-    inlineScript: 'az acr build --registry $containerRegistryName --file Docker/Dockerfile --image c9rtmp:v1 .'
+    inlineScript: 'az acr build --registry $(containerRegistryName) --file Docker/Dockerfile --image $(imageRepository):v1 .'
