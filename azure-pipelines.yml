@@ -38,7 +38,7 @@ steps:
     azureSubscription: 'deployServicePrincipal'
     scriptType: 'pscore'
     scriptLocation: 'scriptPath'
-    scriptPath: 'acr.ps1'
+    scriptPath: 'Deploy/acr.ps1'
     arguments: '$(rgName) $(containerRegistryName)'
 
 - task: AzureCLI@2
