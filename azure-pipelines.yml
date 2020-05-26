@@ -32,6 +32,7 @@ steps:
     csmFile: 'Deploy/azuredeploy-pipeline.json'
     overrideParameters: '-envName $(envName)'
     deploymentMode: 'Incremental'
+    deploymentOutputs: ARM-outputs
 
 - task: AzureCLI@2
   inputs:
