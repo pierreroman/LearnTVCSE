@@ -17,7 +17,7 @@ variables:
   containerRegistryName: 'ltvACR'
   imageRepository: 'c9rtmp'
   tag: 'c9rtmp'
-
+  dockerfilePath: 'Docker/Dockerfile'
 steps:
 
 - task: AzureResourceManagerTemplateDeployment@3
@@ -41,9 +41,12 @@ steps:
     scriptPath: 'Deploy/acr.ps1'
     arguments: '$(rgName) $(containerRegistryName)'
 
-- task: AzureCLI@2
+- task: Docker@2
+  displayName: Build and push an image to container registry
   inputs:
-    azureSubscription: 'deployServicePrincipal'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: 'az acr build --registry $(containerRegistryName) --file Docker/Dockerfile --image $(imageRepository):v1 .'
+    command: buildAndPush
+    repository: $(c9rtmp)
+    dockerfile: $(dockerfilePath)
+    containerRegistry: $(containerRegistryName)
+    tags: |
+      $(tag)
