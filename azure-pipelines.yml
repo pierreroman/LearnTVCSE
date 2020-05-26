@@ -18,6 +18,9 @@ variables:
   imageRepository: 'c9rtmp'
   tag: 'c9rtmp'
   dockerfilePath: 'Docker/Dockerfile'
+  WebAppName: 'RTMP'
+
+
 steps:
 
 - task: AzureResourceManagerTemplateDeployment@3
@@ -48,3 +51,9 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: 'az acr build --registry $(containerRegistryName) --file Docker/Dockerfile --image $(imageRepository):v1 ./Docker'
+
+- task: AzureWebAppContainer@1
+  inputs:
+    azureSubscription: 'deployServicePrincipal'
+    appName: '$(WebAppName)'
+    containers: '$(containerRegistryName)/$(imageRepository):latest'
