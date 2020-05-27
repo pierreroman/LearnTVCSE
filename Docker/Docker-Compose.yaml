@@ -1,0 +1,4 @@
+Linux-RTMP:
+  image: c9rtmp:latest
+  volumes:
+  - Data:/data

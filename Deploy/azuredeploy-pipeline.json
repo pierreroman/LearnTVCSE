@@ -107,6 +107,12 @@
                                     "locations": [
                                         "[variables('location')]"
                                     ]
+                                },
+                                {
+                                    "service": "Microsoft.web",
+                                    "locations": [
+                                        "[variables('location')]"
+                                    ]
                                 }
                             ],
                             "delegations": [
