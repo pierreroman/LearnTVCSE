@@ -23,8 +23,8 @@ steps:
     azureResourceManagerConnection: 'deployServicePrincipal'
     subscriptionId: '54a522b6-6cd7-4325-b4e6-566f9d921835'
     action: 'Create Or Update Resource Group'
-    resourceGroupName: 'LearnTVv2'
-    location: 'westcentralus'
+    resourceGroupName: '$(rgName)'
+    location: '$(location)'
     templateLocation: 'Linked artifact'
     csmFile: 'Deploy/azuredeploy-pipeline.json'
     overrideParameters: '-envName $(envName)'
@@ -45,13 +45,4 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: 'az acr build --registry $(containerRegistryName) --file Docker/Dockerfile --image $(imageRepository):v1 ./Docker'
-
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'deployServicePrincipal'
-    appType: 'webAppContainer'
-    WebAppName: '$(WebAppName)'
-    DockerNamespace: '$(containerRegistryName)'
-    DockerRepository: '$(imageRepository)'
 
