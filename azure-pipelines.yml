@@ -46,8 +46,12 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: 'az acr build --registry $(containerRegistryName) --file Docker/Dockerfile --image $(imageRepository):v1 ./Docker'
 
-- task: AzureWebAppContainer@1
+- task: AzureRmWebAppDeployment@4
   inputs:
+    ConnectionType: 'AzureRM'
     azureSubscription: 'deployServicePrincipal'
-    appName: '$(WebAppName)'
-    containers: '$(containerRegistryName)/$(imageRepository):latest'
+    appType: 'webAppContainer'
+    WebAppName: '$(WebAppName)'
+    DockerNamespace: '$(containerRegistryName)'
+    DockerRepository: '$(imageRepository)'
+
