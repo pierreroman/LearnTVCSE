@@ -15,10 +15,6 @@ variables:
   dockerfilePath: 'Docker/Dockerfile'
   WebAppName: 'RTMP'
 
-stage:
-- stage:
-steps:
-
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
     deploymentScope: 'Resource Group'
@@ -26,7 +22,7 @@ steps:
     subscriptionId: '54a522b6-6cd7-4325-b4e6-566f9d921835'
     action: 'Create Or Update Resource Group'
     resourceGroupName: 'LearnTVv2'
-    location: 'East US'
+    location: 'westcentralus'
     templateLocation: 'Linked artifact'
     csmFile: 'Deploy/azuredeploy-pipeline.json'
     overrideParameters: '-envName $(envName)'
